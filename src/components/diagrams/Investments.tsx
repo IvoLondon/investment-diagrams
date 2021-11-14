@@ -1,38 +1,43 @@
-import React from "react";
-import Chart from "chart.js/auto";
+import { DataType } from "@root/App.d";
+import { calculateWeightAverage, calculateBreakEven } from "@utils/formulas";
 
-const App = () => {
-  const chartContainer = React.useRef(null);
-  let myChart = null;
-
-  React.useEffect(() => {
-    if (chartContainer.current !== null) {
-      myChart = new Chart(chartContainer.current, {
-        type: "doughnut",
-        options: {
-          maintainAspectRatio: true,
-        },
-        data: {
-          labels: ["eth", "cardano"],
-          datasets: [
-            {
-              data: ["10", "100"],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-              ],
-            },
-          ],
-        },
-      });
-    }
-  }, []);
-
-  return <canvas ref={chartContainer} />;
+type InvestmentsDiagramType = {
+  data: DataType;
 };
 
-export default App;
+const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
+  return (
+    <>
+      <table className="table-fixed">
+        <thead>
+          <tr>
+            <th className="w-1/2 px-4 py-2">Token</th>
+            <th className="w-1/4 px-4 py-2">Average Value</th>
+            <th className="w-1/4 px-4 py-2">To Break Even</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.data.tokens.map((token, index) => {
+            return (
+              <tr className={index % 2 ? `bg-gray-100` : undefined}>
+                <td className="border px-4 py-2">{token.token}</td>
+                <td className="border px-4 py-2">
+                  {calculateWeightAverage(token.balance, token.transactions)}
+                </td>
+                <td className="border px-4 py-2">
+                  {calculateBreakEven(
+                    token.balance,
+                    token.transactions,
+                    token.charges
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </>
+  );
+};
+
+export default InvestmentsDiagram;

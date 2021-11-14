@@ -4,17 +4,17 @@ import { Choose, When } from "tsx-control-statements/components";
 import * as Diagrams from "@components/diagrams";
 import Navigation from "@components/Navigation";
 import Data from "../data.json";
-import { DiagramsType } from "./App.d";
+import { DiagramsType, DataType } from "./App.d";
 
 import "./styles/index.scss";
 
 const App = () => {
-  const [diagram, setDiagram] = React.useState<DiagramsType>("current-value");
+  const [diagram, setDiagram] = React.useState<DiagramsType>("investments");
   return (
     <div>
       <Navigation setActive={setDiagram} />
 
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center py-16 justify-center">
           <div className="max-w-6xl">
             <Choose>
@@ -22,7 +22,7 @@ const App = () => {
                 <Diagrams.CurrentValue />
               </When>
               <When condition={diagram === "investments"}>
-                <Diagrams.Investments />
+                <Diagrams.Investments data={Data.data as DataType} />
               </When>
             </Choose>
           </div>
