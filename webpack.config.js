@@ -10,6 +10,11 @@ module.exports = {
     assetModuleFilename: "[path][name][ext]",
   },
   resolve: {
+    alias: {
+      "@root": path.resolve(__dirname, "./src/"),
+      "@assets": path.resolve(__dirname, "./src/assets/"),
+      "@components": path.resolve(__dirname, "./src/components/"),
+    },
     extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   devServer: {
@@ -37,7 +42,7 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
         test: /\.(svg|png|jpg|jpeg)$/,

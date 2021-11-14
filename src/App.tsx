@@ -1,34 +1,33 @@
 import React from "react";
 import { Choose, When } from "tsx-control-statements/components";
-import Logo from "./assets/images/logo.png";
-import * as Diagrams from "./diagrams";
+
+import * as Diagrams from "@components/diagrams";
+import Navigation from "@components/Navigation";
 import Data from "../data.json";
+import { DiagramsType } from "./App.d";
 
 import "./styles/index.scss";
 
-type Diagrams = "current-value" | "investments";
-
 const App = () => {
-  const [diagram, setDiagram] = React.useState<Diagrams>("current-value");
-
+  const [diagram, setDiagram] = React.useState<DiagramsType>("current-value");
   return (
     <div>
-      <header>
-        <img src={Logo} />
-        <button onClick={() => setDiagram("current-value")}>
-          Current Value
-        </button>
-        <button onClick={() => setDiagram("investments")}>Investments</button>
-      </header>
-      Does it work? {Data.data.status}
-      <Choose>
-        <When condition={diagram === "current-value"}>
-          <Diagrams.CurrentValue />
-        </When>
-        <When condition={diagram === "investments"}>
-          <Diagrams.Investments />
-        </When>
-      </Choose>
+      <Navigation setActive={setDiagram} />
+
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="relative flex items-center py-16 justify-center">
+          <div className="max-w-6xl">
+            <Choose>
+              <When condition={diagram === "current-value"}>
+                <Diagrams.CurrentValue />
+              </When>
+              <When condition={diagram === "investments"}>
+                <Diagrams.Investments />
+              </When>
+            </Choose>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

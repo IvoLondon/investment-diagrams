@@ -32,7 +32,12 @@ const CurrentValue = () => {
     }
   }, []);
 
-  return <canvas ref={chartContainer} />;
+  return (
+    <>
+      <div>Curent</div>
+      <canvas ref={chartContainer} />
+    </>
+  );
 };
 
 export default CurrentValue;
