@@ -1,0 +1,41 @@
+/* EXAMPLE DATA */
+{
+  "data": {
+    "deposits": [
+      {
+        "date": "2021-02-07 21:22:33",
+        "sum": "100",
+        "currency": "GBP"
+      },
+      {
+        "date": "2021-02-23",
+        "sum": "200",
+        "currency": "GBP"
+      }
+    ],
+    "tokens": [
+      {
+        "id": "ethereum",
+        "symbol": "eth",
+        "token": "Ethereum",
+        "balance": "0.1",
+        "transactions": [
+          { "price": "1500", "quantity": "0.1", "wallet": "binance" }
+        ],
+        "charges": ["25"]
+      },
+      {
+        "id": "cardano",
+        "symbol": "ada",
+        "token": "Cardano",
+        "balance": "100",
+        "transactions": [
+          { "price": "1.00", "quantity": "50" },
+          { "price": "1.20", "quantity": "50" }
+        ],
+        "charges": ["1.58", "0.98"]
+      }
+    ]
+  },
+  "status": "200"
+}

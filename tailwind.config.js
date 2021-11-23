@@ -1,4 +1,4 @@
 module.exports = {
-  purge: ["./dist/*.html"],
+  purge: ["./src/**/*.tsx"],
   darkMode: false, // or 'media' or 'class'
 };

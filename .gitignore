@@ -1,3 +1,4 @@
 dist
 data.json
 node_modules
+.env
