@@ -14,20 +14,21 @@ export const currentTokenPrices = async (tokens: string) => {
   }
 };
 
-export const currencyConverter = async (sum: number) => {
+export const currencyConverter = async (sum: number): Promise<number> => {
+  let todaysRate;
+
   try {
     // fetch data
     const fetchCurrencies = await fetch(
       "https://free.currconv.com/api/v7/convert?q=GBP_USD&compact=ultra&apiKey=dba1701537314cbb55ac"
     );
-
-    const todaysRate = await fetchCurrencies.json();
-
-    // return the GBP sum into todays rate
-    return sum * todaysRate["GBP_USD"];
+    todaysRate = await fetchCurrencies.json();
   } catch (e) {
     console.log(e);
   }
+
+  // return the GBP sum into todays rate
+  return sum * todaysRate["GBP_USD"];
 };
 
 export default {
