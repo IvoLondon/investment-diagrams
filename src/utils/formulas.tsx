@@ -1,24 +1,25 @@
-import { DataType } from "@root/App.d";
+import { PortfolioDataType, CurrentPricesType } from "@root/App.d";
 
-type TokenType = {
-  total: DataType["tokens"][0]["balance"];
-  transactions: DataType["tokens"][0]["transactions"];
-  charges?: DataType["tokens"][0]["charges"];
-};
+type TokenType = PortfolioDataType["tokens"][0];
+type BalanceType = PortfolioDataType["tokens"][0]["balance"];
+type TransactionsType = PortfolioDataType["tokens"][0]["transactions"];
+type ChargesType = PortfolioDataType["tokens"][0]["charges"];
+
+type DepositsType = PortfolioDataType["deposits"];
 
 export const calculateWeightAverage = (
-  total: TokenType["total"],
-  transactions: TokenType["transactions"]
+  balance: BalanceType,
+  transactions: TransactionsType
 ): string => {
   const totalTransactions = calculateTotal(transactions);
-  const averagePrice = totalTransactions / Number(total);
+  const averagePrice = totalTransactions / Number(balance);
   return averagePrice.toPrecision(5);
 };
 
 export const calculateBreakEven = (
-  total: TokenType["total"],
-  transactions: TokenType["transactions"],
-  charges: TokenType["charges"]
+  balance: BalanceType,
+  transactions: TransactionsType,
+  charges: ChargesType
 ) => {
   let totalTransactions = calculateTotal(transactions);
   let totalTransactionsWithCost = totalTransactions;
@@ -27,15 +28,55 @@ export const calculateBreakEven = (
       return acc + Number(cost);
     }, totalTransactionsWithCost);
   }
-  const averagePrice = totalTransactionsWithCost / Number(total);
+  const averagePrice = totalTransactionsWithCost / Number(balance);
   return averagePrice.toPrecision(5);
 };
 
-const calculateTotal = (transactions: TokenType["transactions"]) => {
+const calculateTotal = (transactions: TransactionsType): number => {
+  // Helper for calculateWeightAverage and calculateBreakEven
   return transactions.reduce(
     (acc: number, current: { price: string; quantity: string }) => {
       return acc + Number(current.price) * Number(current.quantity);
     },
     0
   );
+};
+
+export const calculateDeposits = (deposits: DepositsType): number => {
+  // Iterate through the deposits and adds their sum
+  return deposits.reduce((acc, { sum }) => {
+    return acc + Number(sum);
+  }, 0);
+};
+
+export const calculateCurrentPortfolio = (
+  tokens: Array<TokenType>,
+  livePrices: CurrentPricesType
+): number => {
+  // Iterates over each token
+  const total = tokens.reduce((acc, curr) => {
+    // Takes token id (matches from coingecko)
+    const elementId = curr.id as string;
+
+    // Checks if the element exists in the livePrices list fetched from coingecko
+    if (livePrices.hasOwnProperty(elementId)) {
+      const price = (livePrices as any)[elementId]?.usd;
+
+      // returns the token balance * current price
+      return acc + Number(curr.balance) * Number(price);
+    }
+
+    // return the current acc if the element id doesn't exist in live prices list
+    return acc;
+  }, 0);
+
+  return total;
+};
+
+export const calculatePercentage = (newNum: number, oldNum: number): number => {
+  // Increase = New Number - Original Number
+  const difference = newNum - oldNum;
+
+  // return % increase = Increase ÷ Original Number × 100.
+  return (difference / oldNum) * 100;
 };

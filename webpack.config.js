@@ -4,8 +4,10 @@ const statements = require("tsx-control-statements").default;
 
 module.exports = {
   entry: path.resolve(__dirname, "/index.tsx"),
+  mode: "development",
   output: {
-    filename: "index.bundle.js",
+    clean: true,
+    filename: "index.[hash].bundle.js",
     path: path.resolve(__dirname, "dist"),
     assetModuleFilename: "[path][name][ext]",
   },
@@ -20,6 +22,8 @@ module.exports = {
   },
   devServer: {
     port: 3000,
+    hot: true,
+    open: true,
   },
   module: {
     rules: [

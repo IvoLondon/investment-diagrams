@@ -1,13 +1,39 @@
-import { DataType } from "@root/App.d";
-import { calculateWeightAverage, calculateBreakEven } from "@utils/formulas";
+import { PortfolioDataType, CurrentPricesType } from "@root/App.d";
+import * as API from "@utils/apiHelpers";
+import {
+  calculateWeightAverage,
+  calculateBreakEven,
+  calculateDeposits,
+  calculateCurrentPortfolio,
+  calculatePercentage,
+} from "@utils/formulas";
 
 type InvestmentsDiagramType = {
-  data: DataType;
+  portfolio: PortfolioDataType;
+  livePrices: CurrentPricesType;
 };
 
 const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
+  const deposits = calculateDeposits(props.portfolio.deposits);
+
+  const currentPortfolioValue = calculateCurrentPortfolio(
+    props.portfolio.tokens,
+    props.livePrices
+  );
+
+  const calculateT = async () => {
+    const converted = await API.currencyConverter(deposits);
+    console.log(
+      "Diff",
+      calculatePercentage(currentPortfolioValue, converted as number)
+    );
+  };
+  calculateT();
+
   return (
     <>
+      <div>Currently deposited {deposits}</div>
+
       <table className="table-fixed">
         <thead>
           <tr>
@@ -17,7 +43,7 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
           </tr>
         </thead>
         <tbody>
-          {props.data.tokens.map((token, index) => {
+          {props.portfolio.tokens.map((token, index) => {
             return (
               <tr className={index % 2 ? `bg-gray-100` : undefined}>
                 <td className="border px-4 py-2">{token.token}</td>
