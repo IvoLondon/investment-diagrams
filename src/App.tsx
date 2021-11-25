@@ -34,8 +34,16 @@ const App = () => {
       <Navigation setActive={setDiagram} />
 
       <div className="container mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="relative flex items-center py-16 justify-center">
-          <div className="max-w-6xl">
+        <div className="relative flex py-16">
+          <div className="w-1/2 px-4 justify-items-center">
+            <div className="max-w-lg">
+              <Diagrams.Allocations
+                livePrices={currentPrices}
+                portfolio={Data.data as PortfolioDataType}
+              />
+            </div>
+          </div>
+          <div className="w-1/2 px-4">
             {/* <Choose>
               <When condition={diagram === "current-value"}>
                 <Diagrams.CurrentValue />

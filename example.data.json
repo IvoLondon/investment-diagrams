@@ -19,6 +19,7 @@
         "symbol": "eth",
         "token": "Ethereum",
         "balance": "0.1",
+        "backgroundColor": "rgba(60, 60, 61, 1)",
         "transactions": [
           { "price": "1500", "quantity": "0.1", "wallet": "binance" }
         ],
@@ -29,6 +30,8 @@
         "symbol": "ada",
         "token": "Cardano",
         "balance": "100",
+        "backgroundColor": "rgba(60, 60, 61, 0.5)",
+
         "transactions": [
           { "price": "1.00", "quantity": "50" },
           { "price": "1.20", "quantity": "50" }

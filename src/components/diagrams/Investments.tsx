@@ -44,7 +44,7 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
 
   return (
     <>
-      <table className="table-fixed">
+      <table className="table-fixed mb-8 w-full">
         <thead>
           <tr>
             <th key="token" className="w-1/2 px-4 py-2">
@@ -56,7 +56,7 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
             <th key="break-even" className="w-1/4 px-4 py-2">
               To Break Even
             </th>
-            <th key="break-even" className="w-1/4 px-4 py-2">
+            <th key="current-price" className="w-1/4 px-4 py-2">
               Current Price
             </th>
           </tr>
@@ -95,7 +95,7 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
                   {breakEven}
                 </td>
                 <td
-                  key="break-even"
+                  key="current-price"
                   className={`border px-4 py-2 ${
                     inProfit ? "text-green-500" : "text-red-500"
                   }`}
@@ -107,7 +107,7 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
           })}
         </tbody>
       </table>
-      <table className="table-fixed">
+      <table className="table-fixed w-full">
         <tbody>
           <tr key="deposit" className={`bg-gray-100`}>
             <td className="border px-4 py-2">Deposited</td>

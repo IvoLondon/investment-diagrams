@@ -18,6 +18,7 @@ export type PortfolioDataType = {
     token: string;
     active?: boolean;
     balance: string;
+    backgroundColor: string;
     transactions: {
       price: string;
       quantity: string;
