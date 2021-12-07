@@ -15,8 +15,8 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-    // "types": ["node"],
-    "typeRoots": ["./src/@types"],
+    // "types": ["node", "./node_modules/@types", "./src/@types"],
+    // "typeRoots": ["node", "./src/@types"],
     "baseUrl": ".",
     "paths": {
       "@root*": ["src/*"],
@@ -25,6 +25,6 @@
       "@components*": ["src/components/*"]
     }
   },
-  "include": ["./index.tsx", "App.jsx", "src/*"],
+  "include": ["./index.tsx", "src/*"],
   "exclude": ["node_modules"]
 }

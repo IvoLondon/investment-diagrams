@@ -20,7 +20,7 @@ export const currencyConverter = async (sum: number): Promise<number> => {
   try {
     // fetch data
     const fetchCurrencies = await fetch(
-      "https://free.currconv.com/api/v7/convert?q=GBP_USD&compact=ultra&apiKey=dba1701537314cbb55ac"
+      `https://free.currconv.com/api/v7/convert?q=GBP_USD&compact=ultra&apiKey=${process.env.CONVERT_API}`
     );
     todaysRate = await fetchCurrencies.json();
   } catch (e) {

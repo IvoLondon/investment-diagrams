@@ -4,8 +4,16 @@ import { Choose, When } from "tsx-control-statements/components";
 import * as Diagrams from "@components/diagrams";
 import Navigation from "@components/Navigation";
 import * as API from "@utils/apiHelpers";
-import Data from "../data.json";
 import { DiagramsType, PortfolioDataType, CurrentPricesType } from "./App.d";
+
+import * as ResponseData from "../data.json";
+let response: typeof ResponseData;
+
+if (process.env.DEMO === "true") {
+  response = require("../example.data.json");
+} else {
+  response = ResponseData;
+}
 
 import "./styles/index.scss";
 
@@ -19,7 +27,7 @@ const App = () => {
     const getCurrentPriceData = async () => {
       const tokensIdCollection: Array<string> = [];
 
-      Data.data.tokens.map((token) => {
+      response.data.tokens.map((token) => {
         tokensIdCollection.push(token.id);
       });
 
@@ -39,7 +47,7 @@ const App = () => {
             <div className="max-w-lg">
               <Diagrams.Allocations
                 livePrices={currentPrices}
-                portfolio={Data.data as PortfolioDataType}
+                portfolio={response.data as PortfolioDataType}
               />
             </div>
           </div>
@@ -53,7 +61,7 @@ const App = () => {
             </Choose> */}
             <Diagrams.Investments
               livePrices={currentPrices}
-              portfolio={Data.data as PortfolioDataType}
+              portfolio={response.data as PortfolioDataType}
             />
           </div>
         </div>
