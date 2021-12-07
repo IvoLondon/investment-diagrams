@@ -8,38 +8,65 @@ type ChargesType = PortfolioDataType["tokens"][0]["charges"];
 type DepositsType = PortfolioDataType["deposits"];
 
 export const calculateWeightAverage = (
-  balance: BalanceType,
   transactions: TransactionsType
 ): string => {
-  const totalTransactions = calculateTotal(transactions);
-  const averagePrice = totalTransactions / Number(balance);
-  return averagePrice.toPrecision(5);
+  return calculateTransactions(transactions);
 };
 
 export const calculateBreakEven = (
-  balance: BalanceType,
   transactions: TransactionsType,
   charges: ChargesType
 ) => {
-  let totalTransactions = calculateTotal(transactions);
-  let totalTransactionsWithCost = totalTransactions;
+  return calculateTransactions(transactions, charges);
+};
+
+const calculateTransactions = (
+  transactions: TransactionsType,
+  charges?: ChargesType
+) => {
+  // Sum of all transactions
+  const totalTransactions = calculateTotalTransactions(transactions);
+  // Sum all transactions quantity
+  const totalTransactionsQuantity = calculateTransactionsQuantity(transactions);
+
+  let totalTransactionsWithCost;
   if (charges?.length) {
     totalTransactionsWithCost = charges.reduce((acc, cost) => {
       return acc + Number(cost);
-    }, totalTransactionsWithCost);
+    }, totalTransactions);
+  } else {
+    totalTransactionsWithCost = totalTransactions;
   }
-  const averagePrice = totalTransactionsWithCost / Number(balance);
+
+  const averagePrice =
+    totalTransactionsWithCost / Number(totalTransactionsQuantity);
   return averagePrice.toPrecision(5);
 };
 
-const calculateTotal = (transactions: TransactionsType): number => {
+const calculateTotalTransactions = (transactions: TransactionsType): number => {
   // Helper for calculateWeightAverage and calculateBreakEven
   return transactions.reduce(
-    (acc: number, current: { price: string; quantity: string }) => {
-      return acc + Number(current.price) * Number(current.quantity);
+    (acc: number, order: { price: string; quantity: string }) => {
+      return acc + Number(order.price) * Number(order.quantity);
     },
     0
   );
+};
+
+const calculateTransactionsQuantity = (
+  transactions: TransactionsType
+): number => {
+  // Helper for calculateWeightAverage and calculateBreakEven
+  return transactions.reduce(
+    (acc: number, order: { price: string; quantity: string }) => {
+      return acc + Number(order.quantity);
+    },
+    0
+  );
+};
+
+export const calculatePosition = (balance: BalanceType): number => {
+  return 1;
 };
 
 export const calculateDeposits = (deposits: DepositsType): number => {

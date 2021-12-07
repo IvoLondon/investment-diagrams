@@ -20,6 +20,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react-app": "^10.0.0",
     "css-loader": "^6.5.1",
+    "dotenv-webpack": "^7.0.3",
     "html-webpack-plugin": "^5.5.0",
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
@@ -40,6 +41,7 @@
   },
   "scripts": {
     "start": "webpack serve",
+    "start:demo": "DEMO=true webpack serve",
     "build": "NODE_ENV=production webpack --mode production"
   }
 }

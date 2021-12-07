@@ -64,14 +64,10 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
         <tbody>
           {props.portfolio.tokens.map((token, index) => {
             // calculate the average bought price
-            const average = calculateWeightAverage(
-              token.balance,
-              token.transactions
-            );
+            const average = calculateWeightAverage(token.transactions);
 
             // calculate break even price
             const breakEven = calculateBreakEven(
-              token.balance,
               token.transactions,
               token.charges
             );
@@ -111,15 +107,17 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
         <tbody>
           <tr key="deposit" className={`bg-gray-100`}>
             <td className="border px-4 py-2">Deposited</td>
-            <td className="border px-4 py-2">$ {deposits}</td>
+            <td className="border px-4 py-2">$ {deposits.toFixed(2)}</td>
           </tr>
           <tr key="portfolio">
             <td className="border px-4 py-2">Portfolio value</td>
-            <td className="border px-4 py-2">$ {currentPortfolio}</td>
+            <td className="border px-4 py-2">
+              $ {currentPortfolio.toFixed(2)}
+            </td>
           </tr>
           <tr key="total" className={`bg-gray-100`}>
             <td className="border px-4 py-2">Stats</td>
-            <td className="border px-4 py-2">% {ratio}</td>
+            <td className="border px-4 py-2">% {ratio.toFixed(2)}</td>
           </tr>
         </tbody>
       </table>

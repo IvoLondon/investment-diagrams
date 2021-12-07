@@ -1,4 +1,3 @@
-/* EXAMPLE DATA */
 {
   "data": {
     "deposits": [
@@ -14,6 +13,18 @@
       }
     ],
     "tokens": [
+      {
+        "id": "binancecoin",
+        "symbol": "bnb",
+        "token": "Binance Coin",
+        "balance": "1.5",
+        "backgroundColor": "rgb(252, 213, 53, 1)",
+        "transactions": [
+          { "price": "345", "quantity": "1.5" },
+          { "price": "530", "quantity": "1" },
+          { "price": "675", "quantity": "0.5" }
+        ]
+      },
       {
         "id": "ethereum",
         "symbol": "eth",

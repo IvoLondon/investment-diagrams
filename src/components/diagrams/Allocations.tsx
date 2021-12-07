@@ -25,7 +25,6 @@ const Allocations = (props: AllocationsType) => {
           currentValue,
         };
       });
-      console.log(portfolio);
 
       if (chartContainer.current !== null) {
         myChart = new Chart(chartContainer.current, {
