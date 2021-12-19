@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PortfolioDataType, CurrentPricesType } from "@root/App.d";
+import { IPortfolioDataType, CurrentPricesType } from "@root/App.d";
 import * as API from "@utils/apiHelpers";
 import {
   calculateWeightAverage,
@@ -10,7 +10,7 @@ import {
 } from "@utils/formulas";
 
 type InvestmentsDiagramType = {
-  portfolio: PortfolioDataType;
+  portfolio: IPortfolioDataType;
   livePrices: CurrentPricesType;
 };
 
@@ -22,13 +22,14 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
   React.useEffect(() => {
     const convertInUSD = async () => {
       // adds all the deposits
-      const sumDeposits = calculateDeposits(props.portfolio.deposits);
+
+      const sumDeposits = calculateDeposits(props.portfolio?.deposits);
       // Converts them from GBP to USD
       let sumDepositsInUSD: number = await API.currencyConverter(sumDeposits);
 
       // adds all the tokens * current price
       const sumPortfolioValue = calculateCurrentPortfolio(
-        props.portfolio.tokens,
+        props.portfolio?.tokens,
         props.livePrices
       );
 
@@ -39,7 +40,10 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
       setCurrentPortfolio(sumPortfolioValue);
       setRatio(sumRatio);
     };
-    convertInUSD();
+    if (props.portfolio?.deposits) {
+      // Convert deposits from GBP to USD
+      convertInUSD();
+    }
   });
 
   return (
@@ -62,45 +66,56 @@ const InvestmentsDiagram = (props: InvestmentsDiagramType) => {
           </tr>
         </thead>
         <tbody>
-          {props.portfolio.tokens.map((token, index) => {
-            // calculate the average bought price
-            const average = calculateWeightAverage(token.transactions);
+          {props.portfolio?.tokens
+            ? props.portfolio.tokens.map((token, index) => {
+                let average = "Data not available";
+                let breakEven = "0";
+                if (token.transactions) {
+                  // calculate the average bought price
+                  average = calculateWeightAverage(token.transactions);
 
-            // calculate break even price
-            const breakEven = calculateBreakEven(
-              token.transactions,
-              token.charges
-            );
+                  if (token.charges) {
+                    // calculate break even price
+                    breakEven = calculateBreakEven(
+                      token.transactions,
+                      token.charges
+                    );
+                  } else {
+                    breakEven = average;
+                  }
+                }
 
-            //current live price
-            const currentPrice = (props.livePrices as any)[token.id]?.usd ?? 0;
-            const inProfit = currentPrice > breakEven;
+                //current live price
+                const currentPrice =
+                  (props.livePrices as any)[token.id]?.usd ?? 0;
+                const inProfit = currentPrice > Number(breakEven);
 
-            return (
-              <tr
-                key={token.id}
-                className={index % 2 ? `bg-gray-100` : undefined}
-              >
-                <td key="token" className="border px-4 py-2">
-                  {token.token}
-                </td>
-                <td key="weight-average" className="border px-4 py-2">
-                  {average}
-                </td>
-                <td key="break-even" className="border px-4 py-2">
-                  {breakEven}
-                </td>
-                <td
-                  key="current-price"
-                  className={`border px-4 py-2 ${
-                    inProfit ? "text-green-500" : "text-red-500"
-                  }`}
-                >
-                  {currentPrice}
-                </td>
-              </tr>
-            );
-          })}
+                return (
+                  <tr
+                    key={token.id}
+                    className={index % 2 ? `bg-gray-100` : undefined}
+                  >
+                    <td key="token" className="border px-4 py-2">
+                      {token.token}
+                    </td>
+                    <td key="weight-average" className="border px-4 py-2">
+                      {average}
+                    </td>
+                    <td key="break-even" className="border px-4 py-2">
+                      {breakEven}
+                    </td>
+                    <td
+                      key="current-price"
+                      className={`border px-4 py-2 ${
+                        inProfit ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      {currentPrice}
+                    </td>
+                  </tr>
+                );
+              })
+            : null}
         </tbody>
       </table>
       <table className="table-fixed w-full">

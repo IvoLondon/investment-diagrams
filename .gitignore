@@ -1,4 +1,6 @@
 dist
+real.data.json
 data.json
 node_modules
 .env
+sample.env

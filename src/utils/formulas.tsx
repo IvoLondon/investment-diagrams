@@ -1,27 +1,26 @@
-import { PortfolioDataType, CurrentPricesType } from "@root/App.d";
-
-type TokenType = PortfolioDataType["tokens"][0];
-type BalanceType = PortfolioDataType["tokens"][0]["balance"];
-type TransactionsType = PortfolioDataType["tokens"][0]["transactions"];
-type ChargesType = PortfolioDataType["tokens"][0]["charges"];
-
-type DepositsType = PortfolioDataType["deposits"];
+import {
+  ITokens,
+  TransactionsType,
+  ChargesType,
+  IDeposits,
+  CurrentPricesType,
+} from "@root/App.d";
 
 export const calculateWeightAverage = (
-  transactions: TransactionsType
+  transactions: TransactionsType[]
 ): string => {
   return calculateTransactions(transactions);
 };
 
 export const calculateBreakEven = (
-  transactions: TransactionsType,
+  transactions: TransactionsType[],
   charges: ChargesType
 ) => {
   return calculateTransactions(transactions, charges);
 };
 
 const calculateTransactions = (
-  transactions: TransactionsType,
+  transactions: TransactionsType[],
   charges?: ChargesType
 ) => {
   // Sum of all transactions
@@ -43,7 +42,10 @@ const calculateTransactions = (
   return averagePrice.toPrecision(5);
 };
 
-const calculateTotalTransactions = (transactions: TransactionsType): number => {
+const calculateTotalTransactions = (
+  transactions: TransactionsType[]
+): number => {
+  if (!transactions?.length) return 0;
   // Helper for calculateWeightAverage and calculateBreakEven
   return transactions.reduce(
     (acc: number, order: { price: string; quantity: string }) => {
@@ -54,8 +56,9 @@ const calculateTotalTransactions = (transactions: TransactionsType): number => {
 };
 
 const calculateTransactionsQuantity = (
-  transactions: TransactionsType
+  transactions: TransactionsType[]
 ): number => {
+  if (!transactions?.length) return 0;
   // Helper for calculateWeightAverage and calculateBreakEven
   return transactions.reduce(
     (acc: number, order: { price: string; quantity: string }) => {
@@ -65,11 +68,11 @@ const calculateTransactionsQuantity = (
   );
 };
 
-export const calculatePosition = (balance: BalanceType): number => {
+export const calculatePosition = (balance: string): number => {
   return 1;
 };
 
-export const calculateDeposits = (deposits: DepositsType): number => {
+export const calculateDeposits = (deposits: IDeposits[]): number => {
   // Iterate through the deposits and adds their sum
   return deposits.reduce((acc, { sum }) => {
     return acc + Number(sum);
@@ -77,7 +80,7 @@ export const calculateDeposits = (deposits: DepositsType): number => {
 };
 
 export const calculateCurrentPortfolio = (
-  tokens: Array<TokenType>,
+  tokens: Array<ITokens>,
   livePrices: CurrentPricesType
 ): number => {
   // Iterates over each token

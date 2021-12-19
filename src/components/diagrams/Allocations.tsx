@@ -1,9 +1,9 @@
 import React from "react";
 import Chart from "chart.js/auto";
-import { PortfolioDataType, CurrentPricesType } from "@root/App.d";
+import { IPortfolioDataType, CurrentPricesType } from "@root/App.d";
 
 type AllocationsType = {
-  portfolio: PortfolioDataType;
+  portfolio: IPortfolioDataType;
   livePrices: CurrentPricesType;
 };
 
